@@ -112,6 +112,13 @@ body {
   .waddle__user {
     margin: 0px;
     font-weight: bold;
+    a {
+      color: var(--gray-100);
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
   .waddle__text {
     margin: 0.5em 0px;
@@ -173,6 +180,26 @@ body {
   }
   input[type='submit'] {
     margin: 0.75em 0px 0px 0px;
+  }
+}
+
+.userPage {
+  color: var(--gray-100);
+  .user__profile {
+    padding: 1em;
+    border-bottom: 1px solid var(--gray-900);
+    img {
+      width: 86px;
+      height: 86px;
+      border-radius: 100%;
+    }
+    .user__profile--stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  section {
+    background: var(--gray-800);
   }
 }
 

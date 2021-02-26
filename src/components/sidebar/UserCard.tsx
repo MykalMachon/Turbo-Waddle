@@ -2,12 +2,7 @@ import SignupForm from '/@components/forms/SignupForm';
 import SigninForm from '/@components/forms/SigninForm';
 
 import { supabase } from '/@utils/supabase';
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 const UserCard = () => {
   const queryClient = useQueryClient();

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Waddle = ({ waddle }) => {
   return (
     <article className="waddle">
@@ -14,7 +16,9 @@ const Waddle = ({ waddle }) => {
       </div>
       <div className="waddle__content">
         <p className="waddle__user">
-          {waddle.user_id.display_name || 'Noname'}
+          <Link to={`/users/${waddle.user_id.id}`}>
+            {waddle.user_id.display_name || 'Noname'}
+          </Link>
         </p>
         <p className="waddle__text">{waddle.text}</p>
         <span className="waddle__date">

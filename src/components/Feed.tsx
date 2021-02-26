@@ -1,11 +1,9 @@
-import { useRef } from 'preact/hooks';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import { supabase } from '../utils/supabase';
 import WaddleForm from './forms/WaddleForm';
 import Waddle from './Waddle';
 
 const Feed = () => {
-  const queryClient = useQueryClient();
   const getWaddles = async () => {
     const { data, error } = await supabase
       .from('waddles')
@@ -14,6 +12,7 @@ const Feed = () => {
         text,
         created_at,
         user_id (
+          id,
           display_name,
           profile_pic
         ) `

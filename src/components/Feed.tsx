@@ -7,13 +7,18 @@ import Waddle from './Waddle';
 const Feed = () => {
   const queryClient = useQueryClient();
   const getWaddles = async () => {
-    const { data, error } = await supabase.from('waddles').select(`
+    const { data, error } = await supabase
+      .from('waddles')
+      .select(
+        `
         text,
         created_at,
         user_id (
           display_name,
           profile_pic
-        ) `);
+        ) `
+      )
+      .order('created_at', { ascending: false });
     if (!error) {
       return data;
     } else {

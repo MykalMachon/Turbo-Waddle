@@ -4,6 +4,7 @@ import SigninForm from '../forms/SigninForm';
 import { useState, useEffect } from 'preact/hooks';
 
 import { supabase } from '../../utils/supabase';
+import { User } from '@supabase/supabase-js';
 
 const UserCard = () => {
   const [userInfo, setUserInfo] = useState<User | null>(null);

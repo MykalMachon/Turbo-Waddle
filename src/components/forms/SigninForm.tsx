@@ -1,3 +1,4 @@
+import { UserCredentials } from '@supabase/supabase-js';
 import { supabase } from '../../utils/supabase';
 
 const SigninForm = () => {

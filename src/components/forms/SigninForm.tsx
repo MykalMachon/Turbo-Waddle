@@ -1,6 +1,6 @@
 import { UserCredentials } from '@supabase/supabase-js';
 import { useQueryClient } from 'react-query';
-import { supabase } from '../../utils/supabase';
+import { supabase } from '/@utils/supabase';
 
 const SigninForm = () => {
   const queryClient = useQueryClient();

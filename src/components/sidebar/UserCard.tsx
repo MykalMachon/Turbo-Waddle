@@ -1,7 +1,7 @@
-import SignupForm from '../forms/SignupForm';
-import SigninForm from '../forms/SigninForm';
+import SignupForm from '/@components/forms/SignupForm';
+import SigninForm from '/@components/forms/SigninForm';
 
-import { supabase } from '../../utils/supabase';
+import { supabase } from '/@utils/supabase';
 import {
   QueryClient,
   useMutation,

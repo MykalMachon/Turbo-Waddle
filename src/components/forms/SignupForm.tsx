@@ -1,5 +1,5 @@
 import { UserCredentials } from '@supabase/supabase-js';
-import { supabase } from '../../utils/supabase';
+import { supabase } from '/@utils/supabase';
 
 const LoginForm = () => {
   const signUp = async (event) => {

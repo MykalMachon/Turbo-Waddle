@@ -1,6 +1,6 @@
 import { useRef } from 'preact/hooks';
 import { useMutation, useQueryClient } from 'react-query';
-import { supabase } from '../../utils/supabase';
+import { supabase } from '/@utils/supabase';
 
 const WaddleForm = () => {
   const queryClient = useQueryClient();
@@ -21,7 +21,7 @@ const WaddleForm = () => {
 
   const postWaddleMutation = useMutation(postWaddle, {
     onSuccess: () => {
-      queryClient.queryClient.invalidateQueries('waddles');
+      queryClient.invalidateQueries('waddles');
       waddleInputRef.current.value = '';
     },
   });
@@ -32,6 +32,7 @@ const WaddleForm = () => {
       onSubmit={(e) => {
         e.preventDefault();
         postWaddleMutation.mutate({
+          // @ts-ignore
           text: e.target.waddle.value,
         });
       }}

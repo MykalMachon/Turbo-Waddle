@@ -1,17 +1,17 @@
 import { UserCredentials } from '@supabase/supabase-js';
+import { useQueryClient } from 'react-query';
 import { supabase } from '../../utils/supabase';
 
 const SigninForm = () => {
+  const queryClient = useQueryClient();
   const signin = async (event) => {
     event.preventDefault();
     const signinData: UserCredentials = {
       email: event.target.email.value,
       password: event.target.password.value,
     };
-    const { user, session, error } = await supabase.auth.signIn(signinData);
-    console.log(user);
-    console.log(session);
-    console.log(error);
+    await supabase.auth.signIn(signinData);
+    queryClient.invalidateQueries('authState');
   };
 
   return (

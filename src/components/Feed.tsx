@@ -1,78 +1,49 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useRef } from 'preact/hooks';
+import { useQuery, useQueryClient } from 'react-query';
 import { supabase } from '../utils/supabase';
+import WaddleForm from './forms/WaddleForm';
+import Waddle from './Waddle';
 
 const Feed = () => {
-  const postWaddle = async (event) => {
-    event.preventDefault();
-    const waddleData = {
-      text: event.target.waddle.value,
-      user_id: supabase.auth.user()?.id,
-    };
-    const { data, error } = await supabase.from('waddles').insert(waddleData);
-    if (error) {
-      alert('something went wrong!');
+  const queryClient = useQueryClient();
+  const getWaddles = async () => {
+    const { data, error } = await supabase.from('waddles').select(`
+        text,
+        created_at,
+        user_id (
+          display_name,
+          profile_pic
+        ) `);
+    if (!error) {
+      return data;
     } else {
-      console.log(data);
+      throw new Error(error.toString());
     }
   };
 
-  const [waddles, setWaddles] = useState<any>(null);
-
-  useEffect(() => {
-    const getWaddles = async () => {
-      const { data, error } = await supabase.from('waddles').select(`
-          text,
-          created_at,
-          user_id (
-            display_name,
-            profile_pic
-          ) `);
-      if (!error) {
-        setWaddles(data);
-      } else {
-        alert(`couldn't get waddles`);
-      }
-    };
-    getWaddles();
-  }, []);
+  const { isLoading, error, data } = useQuery('waddles', getWaddles);
+  const { data: authState } = useQuery('authState');
 
   return (
     <main className="feed">
       <section className="title">
         <h2>Your Waddles 🦆</h2>
       </section>
-      <form className="new_waddle" onSubmit={postWaddle}>
-        <label htmlFor="waddle">
-          <textarea
-            name="waddle"
-            id="waddle"
-            cols={30}
-            rows={3}
-            placeholder="what are you waddling about?"
-          ></textarea>
-        </label>
-        <input type="submit" value="Waddle" />
-      </form>
+      {authState ? (
+        <WaddleForm />
+      ) : (
+        <div className="unauth_waddle">
+          <p>Signin to waddle! ✨</p>
+        </div>
+      )}
       <section className="waddles">
-        {waddles ? (
+        {isLoading && <p>loading...</p>}
+        {data && (
           <>
-            {waddles.map((waddle) => (
-              <article className="waddle">
-                <div className="waddle__pic">
-                  <img src={waddle.user_id.profile_pic} alt="Picture" />
-                </div>
-                <div className="waddle__content">
-                  <p className="waddle__user">{waddle.user_id.display_name}</p>
-                  <p className="waddle__text">{waddle.text}</p>
-                  <span className="waddle__date">
-                    {new Date(waddle.created_at).toDateString()}
-                  </span>
-                </div>
-              </article>
+            {data.map((waddle) => (
+              <Waddle waddle={waddle} />
             ))}
           </>
-        ) : (
-          <p>loading...</p>
         )}
       </section>
     </main>

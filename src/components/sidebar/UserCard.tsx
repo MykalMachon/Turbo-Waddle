@@ -1,32 +1,45 @@
 import SignupForm from '../forms/SignupForm';
 import SigninForm from '../forms/SigninForm';
 
-import { useState, useEffect } from 'preact/hooks';
-
 import { supabase } from '../../utils/supabase';
-import { User } from '@supabase/supabase-js';
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 
 const UserCard = () => {
-  const [userInfo, setUserInfo] = useState<User | null>(null);
+  const queryClient = useQueryClient();
+  const { data, error, isLoading } = useQuery(
+    'authState',
+    () => supabase.auth.user(),
+    { refetchOnMount: true, refetchOnWindowFocus: true, refetchInterval: 5000 }
+  );
 
-  useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      console.log('auth state changed');
-      setUserInfo(supabase.auth.user());
-    });
-  }, []);
-
-  const signOut = () => {
-    supabase.auth.signOut();
+  const signOut = async () => {
+    return await supabase.auth.signOut();
   };
+
+  const mutateAuth = useMutation(signOut, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('authState');
+    },
+  });
 
   return (
     <aside className="userCard">
-      {userInfo ? (
+      {data ? (
         <>
           <p>You're logged in</p>
-          <p className="username">{userInfo.email}</p>
-          <button onClick={signOut}>Signout</button>
+          <p className="username">{data.email}</p>
+          <button
+            onClick={() => {
+              mutateAuth.mutate();
+            }}
+          >
+            Signout
+          </button>
         </>
       ) : (
         <>

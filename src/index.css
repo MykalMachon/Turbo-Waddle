@@ -40,8 +40,8 @@ body {
 
 .appLayout {
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-gap: 2em;
+  grid-template-columns: 1fr 600px 1fr;
+  grid-gap: 1em;
 }
 
 .feed {
@@ -74,6 +74,16 @@ body {
       font-family: sans-serif;
     }
     border-bottom: 1px solid var(--gray-900);
+  }
+  .unauth_waddle {
+    background: var(--gray-800);
+    padding: 1em;
+    border-bottom: 1px solid var(--gray-900);
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    color: var(--gray-100);
   }
   .waddles {
     background: var(--gray-800);
@@ -116,9 +126,6 @@ body {
 }
 
 .userCard {
-  position: static;
-  top: 24px;
-  left: 25px;
   max-width: 400px;
   padding: 0.75em;
   border-radius: 0.25em;
@@ -166,5 +173,17 @@ body {
   }
   input[type='submit'] {
     margin: 0.75em 0px 0px 0px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .appLayout {
+    grid-template-columns: 1fr;
+  }
+  .feed {
+    width: 100%;
+  }
+  .userCard {
+    max-width: 100%;
   }
 }

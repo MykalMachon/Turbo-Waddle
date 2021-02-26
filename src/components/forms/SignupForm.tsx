@@ -23,6 +23,7 @@ const LoginForm = () => {
           <input type="password" name="password" id="password" />
         </label>
         <input type="submit" value="Sign Up" />
+        <p>After your signup, check your email for an invite link 😀</p>
       </form>
     </div>
   );

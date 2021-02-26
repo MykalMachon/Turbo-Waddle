@@ -4,8 +4,9 @@ This is a Twitter clone for my friends and I to use!
 
 ## Tech Stack 👨‍💻
 
-- Next.js
+- Vite
 - Supabase
+- React Query
 
 ### Backstory
 

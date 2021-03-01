@@ -27,19 +27,35 @@ const getFollowing = async (userId: string) => {
   return count;
 };
 
-const getUserAFollowingUserB = async (userAId: string, userBId: string) => {
+/**
+ * return true if userA is following userB
+ * @param userAId
+ * @param userBId
+ */
+const getUserAFollowingUserB = async (
+  userAId: string,
+  userBId: string
+): Promise<boolean> => {
   const { error, count } = await supabase
     .from('follows')
     .select('id', { count: 'exact' })
-    .match({ follwer_id: userAId, followed_id: userBId });
+    .match({ follower_id: userAId, followed_id: userBId });
   return count == 1;
 };
 
-const getUserAFollowedByUserB = async (userAId: string, userBId: string) => {
+/**
+ * return true if userA is being followed by userB
+ * @param userAId
+ * @param userBId
+ */
+const getUserAFollowedByUserB = async (
+  userAId: string,
+  userBId: string
+): Promise<boolean> => {
   const { error, count } = await supabase
     .from('follows')
     .select('id', { count: 'exact' })
-    .match({ follwer_id: userBId, followed_id: userAId });
+    .match({ follower_id: userBId, followed_id: userAId });
   return count == 1;
 };
 
@@ -69,14 +85,42 @@ const getUserInfo = async (userId) => {
  *
  * @param userId a userId
  */
-export const getProfileData = async (userId: string) => {
+export const getProfileData = async (userId: string, authId: string) => {
   return {
     ...(await getUserInfo(userId)),
     followers: await getFollowers(userId),
     following: await getFollowing(userId),
-    isFollowingAuthedUser: false,
-    isFollwedByAuthedUser: false,
+    isFollowingAuthedUser: authId
+      ? await getUserAFollowingUserB(userId, authId)
+      : false,
+    isFollwedByAuthedUser: authId
+      ? await getUserAFollowedByUserB(userId, authId)
+      : false,
     isAuthedUser: () => supabase.auth.user()?.id == userId,
     waddles: await getWaddlesByUser(userId),
   };
+};
+
+export const followUser = async (userId, authId) => {
+  const { error } = await supabase.from('follows').insert({
+    follower_id: authId,
+    followed_id: userId,
+  });
+  if (error) {
+    console.log('could not follow user');
+  } else {
+    console.log('followed user');
+  }
+};
+
+export const unfollowUser = async (userId, authId) => {
+  const { error } = await supabase.from('follows').delete().match({
+    follower_id: authId,
+    followed_id: userId,
+  });
+  if (error) {
+    console.log('could not unfollow user');
+  } else {
+    console.log('unfollowed user');
+  }
 };

@@ -85,7 +85,8 @@ const getUserInfo = async (userId) => {
  *
  * @param userId a userId
  */
-export const getProfileData = async (userId: string, authId: string) => {
+export const getProfileData = async (userId: string, authId: string | null) => {
+  console.log(`userId: ${userId} authId: ${authId}`);
   return {
     ...(await getUserInfo(userId)),
     followers: await getFollowers(userId),

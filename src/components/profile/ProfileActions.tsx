@@ -1,4 +1,3 @@
-import { useEffect } from 'preact/hooks';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { followUser, unfollowUser } from '/@utils/users';
 

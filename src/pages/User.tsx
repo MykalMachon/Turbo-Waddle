@@ -1,51 +1,26 @@
 import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { supabase } from '/@utils/supabase';
-import Waddle from '/@components/Waddle';
-import UserCard from '/@components/sidebar/UserCard';
 import ProfileHeader from '/@components/profile/ProfileHeader';
+import ProfileWaddles from '/@components/profile/ProfileWaddles';
+import { getProfileData } from '/@utils/users';
+import { useQuery } from 'react-query';
+import ProfileActions from '/@components/profile/ProfileActions';
 
 const UserPage = () => {
   const { userId } = useParams();
+  const { data, isLoading, error } = useQuery(
+    ['user', userId],
+    async () => await getProfileData(userId)
+  );
+  const { data: auth, isLoading: authLoading } = useQuery('authState');
 
-  const {
-    isLoading: waddlesLoading,
-    error: waddlesError,
-    data: waddlesData,
-  } = useQuery(['waddles', userId], async () => {
-    const { data, error } = await supabase
-      .from('waddles')
-      .select(
-        `id, text, created_at, user_id (
-          id,
-          display_name,
-          profile_pic
-        )`
-      )
-      .eq('user_id', userId);
-    if (error) {
-      console.error(error);
-      throw new Error(error.toString());
-    } else {
-      return data;
-    }
-  });
-
-  const { data: authData, isLoading: authLoading } = useQuery('authState');
-
+  if (isLoading) return <p>loading...</p>;
+  if (error) return <p>failed to load page</p>;
   return (
     <div className="appLayout">
-      <UserCard />
       <main className="userPage feed">
-        <ProfileHeader userId={userId} />
-        {waddlesLoading && <p>Loading</p>}
-        {waddlesData && (
-          <section className="waddles">
-            {waddlesData.map((waddle) => (
-              <Waddle waddle={waddle} />
-            ))}
-          </section>
-        )}
+        <ProfileHeader data={data} />
+        {!authLoading && auth && <ProfileActions data={data} />}
+        <ProfileWaddles waddles={data.waddles} />
       </main>
     </div>
   );

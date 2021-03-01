@@ -2,12 +2,7 @@ import Feed from '/@components/Feed';
 import UserCard from '/@components/sidebar/UserCard';
 
 const HomePage = () => {
-  return (
-    <div className="appLayout">
-      <UserCard />
-      <Feed />
-    </div>
-  );
+  return <Feed />;
 };
 
 export default HomePage;

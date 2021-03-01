@@ -1,16 +1,11 @@
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { supabase } from '/@utils/supabase';
 import SignupForm from '/@components/forms/SignupForm';
 import SigninForm from '/@components/forms/SigninForm';
 
-import { supabase } from '/@utils/supabase';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-
 const UserCard = () => {
   const queryClient = useQueryClient();
-  const { data, error, isLoading } = useQuery(
-    'authState',
-    () => supabase.auth.user(),
-    { refetchOnMount: true, refetchOnWindowFocus: true, refetchInterval: 5000 }
-  );
+  const { data } = useQuery('authState');
 
   const signOut = async () => {
     return await supabase.auth.signOut();
@@ -23,9 +18,9 @@ const UserCard = () => {
   });
 
   return (
-    <aside className="userCard">
+    <>
       {data ? (
-        <>
+        <div className="card">
           <p>You're logged in</p>
           <p className="username">{data.email}</p>
           <button
@@ -35,9 +30,9 @@ const UserCard = () => {
           >
             Signout
           </button>
-        </>
+        </div>
       ) : (
-        <>
+        <div className="card">
           <details>
             <summary>Sign Up</summary>
             <SignupForm />
@@ -46,9 +41,9 @@ const UserCard = () => {
             <summary>Sign In</summary>
             <SigninForm />
           </details>
-        </>
+        </div>
       )}
-    </aside>
+    </>
   );
 };
 

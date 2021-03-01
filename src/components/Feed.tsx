@@ -1,37 +1,16 @@
 import { useQuery } from 'react-query';
-import { supabase } from '../utils/supabase';
 import WaddleForm from './forms/WaddleForm';
 import Waddle from './Waddle';
+import { getAllWaddles } from '/@utils/waddles';
 
 const Feed = () => {
-  const getWaddles = async () => {
-    const { data, error } = await supabase
-      .from('waddles')
-      .select(
-        `
-        text,
-        created_at,
-        user_id (
-          id,
-          display_name,
-          profile_pic
-        ) `
-      )
-      .order('created_at', { ascending: false });
-    if (!error) {
-      return data;
-    } else {
-      throw new Error(error.toString());
-    }
-  };
-
-  const { isLoading, error, data } = useQuery('waddles', getWaddles);
+  const { isLoading, error, data } = useQuery('waddleFeed', getAllWaddles);
   const { data: authState } = useQuery('authState');
 
   return (
     <main className="feed">
       <section className="title">
-        <h2>Your Waddles 🦆</h2>
+        <h2>Duck Pond 🦆</h2>
       </section>
       {authState ? (
         <WaddleForm />
@@ -42,6 +21,7 @@ const Feed = () => {
       )}
       <section className="waddles">
         {isLoading && <p>loading...</p>}
+        {error && <p>failed to load waddles...</p>}
         {data && (
           <>
             {data.map((waddle) => (

@@ -21,7 +21,7 @@ const WaddleForm = () => {
 
   const postWaddleMutation = useMutation(postWaddle, {
     onSuccess: () => {
-      queryClient.invalidateQueries('waddles');
+      queryClient.invalidateQueries('waddleFeed');
       waddleInputRef.current.value = '';
     },
   });

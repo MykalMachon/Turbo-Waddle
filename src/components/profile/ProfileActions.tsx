@@ -1,31 +1,26 @@
-import { useQuery } from 'react-query';
-import { supabase } from '/@utils/supabase';
+import { useEffect } from 'preact/hooks';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { followUser, unfollowUser } from '/@utils/users';
 
 const ProfileActions = ({ data }) => {
-  const { data: auth } = useQuery('authState');
+  const queryClient = useQueryClient();
+  const { data: auth } = useQuery<{ id: string }>('authState');
 
-  const followUser = async () => {
-    if (auth) {
-      const { data: followData, error } = await supabase
-        .from('follows')
-        .insert({
-          follower_id: auth.id,
-          followed_id: data.id,
-        });
-      if (error) {
-        console.log('could not follow user');
-      } else {
-        console.log('followed user');
-      }
-    }
-  };
+  const mutateFollow = useMutation<
+    any,
+    any,
+    { userId: string; authId: string }
+  >(({ userId, authId }) => followUser(userId, authId), {
+    onSuccess: () => queryClient.invalidateQueries(['user', data.id, auth.id]),
+  });
 
-  const unfollowUser = () => {
-    if (auth) {
-      // TODO stub
-      // supabase.from('follows').delete()
-    }
-  };
+  const mutateUnfollow = useMutation<
+    any,
+    any,
+    { userId: string; authId: string }
+  >(({ userId, authId }) => unfollowUser(userId, authId), {
+    onSuccess: () => queryClient.invalidateQueries(['user', data.id, auth.id]),
+  });
 
   return (
     <section className="user__profile--actions">
@@ -33,9 +28,26 @@ const ProfileActions = ({ data }) => {
         <button>edit profile</button>
       ) : (
         <>
-          {data.isFollowingAuthedUser && <button data-checked>unfollow</button>}
+          {data.isFollwedByAuthedUser && (
+            <button
+              onClick={() => {
+                mutateUnfollow.mutate({ userId: data.id, authId: auth.id });
+              }}
+              data-checked
+              disabled={mutateUnfollow.isLoading}
+            >
+              unfollow
+            </button>
+          )}
           {!data.isFollwedByAuthedUser && (
-            <button onClick={followUser}>follow</button>
+            <button
+              onClick={() => {
+                mutateFollow.mutate({ userId: data.id, authId: auth.id });
+              }}
+              disabled={mutateFollow.isLoading}
+            >
+              follow
+            </button>
           )}
         </>
       )}

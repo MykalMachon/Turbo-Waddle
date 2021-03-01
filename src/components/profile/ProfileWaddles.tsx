@@ -1,5 +1,3 @@
-import { useQuery } from 'react-query';
-import { getWaddlesByUser } from '/@utils/waddles';
 import Waddle from '../Waddle';
 
 const ProfileWaddles = ({ waddles }) => {

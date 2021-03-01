@@ -12,7 +12,7 @@ const ProfileActions = ({ data }) => {
     any,
     { userId: string; authId: string }
   >(({ userId, authId }) => followUser(userId, authId), {
-    onSuccess: () => queryClient.invalidateQueries(['user', data.id, auth.id]),
+    onSuccess: () => queryClient.invalidateQueries(['user', data.id]),
   });
 
   const mutateUnfollow = useMutation<
@@ -20,7 +20,7 @@ const ProfileActions = ({ data }) => {
     any,
     { userId: string; authId: string }
   >(({ userId, authId }) => unfollowUser(userId, authId), {
-    onSuccess: () => queryClient.invalidateQueries(['user', data.id, auth.id]),
+    onSuccess: () => queryClient.invalidateQueries(['user', data.id]),
   });
 
   return (

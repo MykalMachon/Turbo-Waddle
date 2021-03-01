@@ -14,8 +14,6 @@ const WaddleForm = () => {
     const { data, error } = await supabase.from('waddles').insert(waddleData);
     if (error) {
       alert('something went wrong!');
-    } else {
-      console.log(data);
     }
   };
 

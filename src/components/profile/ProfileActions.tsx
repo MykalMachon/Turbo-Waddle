@@ -1,8 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useRouteMatch, Link } from 'react-router-dom';
 import { followUser, unfollowUser } from '/@utils/users';
 
 const ProfileActions = ({ data }) => {
   const queryClient = useQueryClient();
+  let match = useRouteMatch();
   const { data: auth } = useQuery<{ id: string }>('authState');
 
   const mutateFollow = useMutation<
@@ -24,7 +26,7 @@ const ProfileActions = ({ data }) => {
   return (
     <section className="user__profile--actions">
       {data.isAuthedUser() ? (
-        <button>edit profile</button>
+        <Link to={`${match.url}/edit`}>Edit profile</Link>
       ) : (
         <>
           {data.isFollwedByAuthedUser && (

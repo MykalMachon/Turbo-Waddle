@@ -1,12 +1,20 @@
-import { useParams } from 'react-router-dom';
+import {
+  useParams,
+  useRouteMatch,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 import ProfileHeader from '/@components/profile/ProfileHeader';
 import ProfileWaddles from '/@components/profile/ProfileWaddles';
 import { getProfileData } from '/@utils/users';
 import { useQuery } from 'react-query';
 import ProfileActions from '/@components/profile/ProfileActions';
+import ProfileEditPage from '/@components/profile/ProfileEditPage';
 
 const UserPage = () => {
   const { userId } = useParams();
+  let match = useRouteMatch();
   const { data: auth, isLoading: authLoading } = useQuery<{ id: string }>(
     'authState'
   );
@@ -22,9 +30,20 @@ const UserPage = () => {
   if (error) return <p>failed to load page</p>;
   return (
     <main className="userPage feed">
-      <ProfileHeader data={data} />
-      {!authLoading && auth && <ProfileActions data={data} />}
-      <ProfileWaddles waddles={data.waddles} />
+      <Switch>
+        <Route path={`${match.path}/edit`}>
+          {data.isAuthedUser() ? (
+            <ProfileEditPage data={data} />
+          ) : (
+            <Redirect to="/" />
+          )}
+        </Route>
+        <Route path={`${match.path}`}>
+          <ProfileHeader data={data} />
+          {!authLoading && auth && <ProfileActions data={data} />}
+          <ProfileWaddles waddles={data.waddles} />
+        </Route>
+      </Switch>
     </main>
   );
 };

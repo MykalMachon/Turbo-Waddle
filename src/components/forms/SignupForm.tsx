@@ -1,7 +1,9 @@
 import { UserCredentials } from '@supabase/supabase-js';
-import { supabase } from '/@utils/supabase';
+import useSupabase from '../supabase/useSupabase';
 
 const LoginForm = () => {
+  const supabase = useSupabase();
+
   const signUp = async (event) => {
     event.preventDefault();
     const signUpData: UserCredentials = {

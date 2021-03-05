@@ -1,10 +1,11 @@
 import { useRef } from 'preact/hooks';
 import { useMutation, useQueryClient } from 'react-query';
-import { supabase } from '/@utils/supabase';
+import useSupabase from '../supabase/useSupabase';
 
 const WaddleForm = () => {
   const queryClient = useQueryClient();
   const waddleInputRef = useRef(null);
+  const supabase = useSupabase();
 
   const postWaddle = async (waddle) => {
     const waddleData = {

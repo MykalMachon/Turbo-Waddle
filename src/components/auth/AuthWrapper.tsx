@@ -1,8 +1,9 @@
 import { useEffect } from 'preact/hooks';
 import { useQuery } from 'react-query';
-import { supabase } from '/@utils/supabase';
+import useSupabase from '../supabase/useSupabase';
 
 const AuthWrapper = ({ children }) => {
+  const supabase = useSupabase();
   const { data, isLoading } = useQuery(
     'authState',
     () => {

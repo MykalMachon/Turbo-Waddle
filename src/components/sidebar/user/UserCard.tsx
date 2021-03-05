@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { supabase } from '/@utils/supabase';
 import SignupForm from '/@components/forms/SignupForm';
 import SigninForm from '/@components/forms/SigninForm';
+import useSupabase from '/@components/supabase/useSupabase';
 
 const UserCard = () => {
   const queryClient = useQueryClient();
+  const supabase = useSupabase();
   const { data } = useQuery('authState');
 
   const signOut = async () => {

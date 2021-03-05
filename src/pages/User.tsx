@@ -1,3 +1,4 @@
+// utilities and libs
 import {
   useParams,
   useRouteMatch,
@@ -5,10 +6,12 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getProfileData } from '/@utils/users';
+
+// profile components
 import ProfileHeader from '/@components/profile/ProfileHeader';
 import ProfileWaddles from '/@components/profile/ProfileWaddles';
-import { getProfileData } from '/@utils/users';
-import { useQuery } from 'react-query';
 import ProfileActions from '/@components/profile/ProfileActions';
 import ProfileEditPage from '/@components/profile/ProfileEditPage';
 

@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query';
 import { FunctionComponent } from 'preact';
+import { User } from '@supabase/supabase-js';
 
 type IsAuthenticatedProps = {
   UnauthComponent?: FunctionComponent;
@@ -9,7 +10,7 @@ const IsAuthenticated: FunctionComponent<IsAuthenticatedProps> = ({
   children,
   UnauthComponent,
 }) => {
-  const { data, isLoading, error } = useQuery('authState');
+  const { data, isLoading, error } = useQuery<User>('authState');
   if (isLoading) return <p>loading</p>;
   if (error) {
     console.error(error);

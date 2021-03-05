@@ -1,5 +1,6 @@
+import { User } from '@supabase/supabase-js';
 import { useRef } from 'preact/hooks';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import useSupabase from '../supabase/useSupabase';
 
 const WaddleForm = () => {
@@ -7,10 +8,12 @@ const WaddleForm = () => {
   const waddleInputRef = useRef(null);
   const supabase = useSupabase();
 
+  const { data: auth } = useQuery<User>('authState');
+
   const postWaddle = async (waddle) => {
     const waddleData = {
       text: waddle.text,
-      user_id: supabase.auth.user()?.id,
+      user_id: auth.id,
     };
     const { data, error } = await supabase.from('waddles').insert(waddleData);
     if (error) {

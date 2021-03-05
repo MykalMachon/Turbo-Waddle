@@ -1,3 +1,4 @@
+import { PublicUser } from 'src/typings';
 import { supabase } from './supabase';
 import { getWaddlesByUser } from './waddles';
 
@@ -59,7 +60,7 @@ const getUserAFollowedByUserB = async (
   return count == 1;
 };
 
-const getUserInfo = async (userId) => {
+const getUserInfo = async (userId): Promise<PublicUser> => {
   const { data, error } = await supabase
     .from('users')
     .select(

@@ -1,10 +1,11 @@
+import { User } from '@supabase/supabase-js';
 import { useEffect } from 'preact/hooks';
 import { useQuery } from 'react-query';
 import useSupabase from '../supabase/useSupabase';
 
 const AuthWrapper = ({ children }) => {
   const supabase = useSupabase();
-  const { data, isLoading } = useQuery(
+  const { data, isLoading } = useQuery<User>(
     'authState',
     () => {
       return supabase.auth.user();
